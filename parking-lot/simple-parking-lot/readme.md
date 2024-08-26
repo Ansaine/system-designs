@@ -1,10 +1,8 @@
 ## Parking lot features
 
-1. Multi floor parking 
-2. Multiple Entries and Exits
-3. Payment system
-4. Parking types like bike,car,handicapped
+1. Floorless parking lot. We are simply taking array of parking spots 
+2. Only one vechile object, no type
 
 ## Structure
 
-1. Each floor has say 100 bikes, 50 cars space (slot can be -  Eg bike-1,bike-2, bike 30, car-5,car 40 etc.)
+1. We initialise an array of n spots and park in them or remove from them
