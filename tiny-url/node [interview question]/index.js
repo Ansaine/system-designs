@@ -13,7 +13,7 @@ export const port = 3000;
 app.post('/shorten',controller.shorten)
 app.get('/:alias', controller.getLongURLfromAlias)
 app.get('/analytics/:alias',controller.analytics)
-app.get('/update/:alias',controller.updateAlias)
+app.put('/update/:alias',controller.updateAlias)
 app.delete('/delete/:alias',controller.deleteAlias)
 
 

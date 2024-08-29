@@ -7,6 +7,14 @@ let urlMap = new Map();
 let timeMap = new Map();   // alias->{time1,time2,....}
 
 
+/*****  API helper ********/
+
+const deleteAliasFromMaps=(alias)=>{
+    urlMap.delete(alias);
+    timeMap.delete(alias);
+}
+
+
 /*****  API definitions ********/
 const shorten = (req,res)=>{
     try{
@@ -19,9 +27,10 @@ const shorten = (req,res)=>{
             custom_alias = bs58.encode(buffer);
             ++id;
         }
-    
-        urlMap.set(custom_alias,{long_url,ttl_seconds})
-        console.log(custom_alias+" : "+long_url+","+ttl_seconds )
+        
+        const details = {long_url,ttl_seconds}
+        urlMap.set(custom_alias,details)
+        console.log(urlMap.get(custom_alias) )
         
         return res.status(200).json({short_url:`http:localhost:${port}/`+custom_alias})
 
@@ -87,8 +96,40 @@ const analytics = (req,res)=>{
     }
 
 }
-const deleteAlias = (req,res)=>{}
-const updateAlias = (req,res)=>{}
+const deleteAlias = (req,res)=>{
+    try{
+        const alias = req.params.alias;
+        deleteAliasFromMaps(alias);
+        return res.status(200).json({ message: "Aliases deleted" });
+
+    }catch(err){
+        return res.status(404).json({ message: "Error deleting alias" });
+    }
+}
+
+// key update cant be dont directly in javascipt
+const updateAlias = (req,res)=>{
+    try{
+        const oldAlias = req.params.alias
+        const {custom_alias,ttl_seconds} = req.body;
+
+        const detials = urlMap.get(oldAlias);
+        detials.ttl_seconds = ttl_seconds;  // set new ttl
+
+        const access_times = timeMap.get(oldAlias);
+
+        urlMap.delete(oldAlias);
+        timeMap.delete(oldAlias);
+
+        urlMap.set(custom_alias,detials);
+        timeMap.set(custom_alias,access_times);
+
+        return res.status(200).json({ message: "updated alias" });
+
+    }catch(err){
+        return res.status(404).json({ message: "Error updating alias" });
+    }
+}
 
 export {
     shorten,
