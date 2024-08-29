@@ -9,3 +9,8 @@
 2. we keep a number with all long urls starting from 1 and map the encoded number to the url.
 3. using Buffer.alloc(4) which means -  
     4-byte buffer can handle (0 to 4,294,967,295).
+
+## Design challenges 
+1. Tackling ttl
+2. Map design choice 
+3. Direct updating keys in map is not possible, so we delete previous values then add new ones
