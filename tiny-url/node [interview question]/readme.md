@@ -12,6 +12,11 @@
 
 ## Tables used 
 
-
 1. UrlMap:   alias->{longUrl, createdAt, ttl_seconds}   // createdAt is needed for ttl implementation               
 2. timeMap:  alias->{time1,time2,....}          // for analytics
+
+
+## How to handle ttle
+
+1. Use setInterval to continuously poll time and check is ttl_seconds has passed. But this is unefficient
+2. Better use setTimeout just when we generate a new longUrl

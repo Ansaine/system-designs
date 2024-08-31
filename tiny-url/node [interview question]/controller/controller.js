@@ -14,19 +14,6 @@ const deleteAliasFromMaps=(alias)=>{
     timeMap.delete(alias);
 }
 
-const ttlChecker = async ()=>{
-    setInterval(() => {
-        for( const [key,val] of urlMap){
-            const currTime = new Date;
-            if(currTime.getTime()-val.createdAt.getTime()>=val.ttl_seconds*1000){
-                deleteAliasFromMaps(key);
-            }
-        }
-        
-    }, 200);
-}
-
-
 /*****  API definitions ********/
 const shorten = (req,res)=>{
     try{
@@ -43,6 +30,11 @@ const shorten = (req,res)=>{
         const createdAt = new Date();
         urlMap.set(custom_alias,{long_url,createdAt,ttl_seconds})
         console.log(urlMap.get(custom_alias))
+
+        //deletion
+        setTimeout(()=>{
+            deleteAliasFromMaps(custom_alias)
+        },ttl_seconds*1000)
         
         return res.status(200).json({short_url:`http:localhost:${port}/`+custom_alias})
 
@@ -149,5 +141,4 @@ export {
     analytics,
     deleteAlias,
     updateAlias,
-    ttlChecker
 } 

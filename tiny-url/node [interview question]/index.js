@@ -20,7 +20,6 @@ app.delete('/delete/:alias',controller.deleteAlias)
 // start app
 app.listen(port,()=>{
     console.log(`Listening on port ${port} `);
-    controller.ttlChecker();
 })
 
 
