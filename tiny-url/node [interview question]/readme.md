@@ -9,3 +9,9 @@
 2. we keep a number with all long urls starting from 1 and map the encoded number to the url.
 3. using Buffer.alloc(4) which means -  
     4-byte buffer can handle (0 to 4,294,967,295).
+
+## Tables used 
+
+
+1. UrlMap:   alias->{longUrl, createdAt, ttl_seconds}   // createdAt is needed for ttl implementation               
+2. timeMap:  alias->{time1,time2,....}          // for analytics

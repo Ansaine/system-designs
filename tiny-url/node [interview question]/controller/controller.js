@@ -3,15 +3,27 @@ import { port } from '../index.js';
 
 /*****  Storage variables ********/
 let id = 1;
-let urlMap = new Map();
-let timeMap = new Map();   // alias->{time1,time2,....}
+let urlMap = new Map();     // alias->{longUrl,createdAt,ttl_seconds}
+let timeMap = new Map();    // alias->{time1,time2,....} for analytics
 
 
-/*****  API helper ********/
+/***** helper functions  ********/
 
 const deleteAliasFromMaps=(alias)=>{
     urlMap.delete(alias);
     timeMap.delete(alias);
+}
+
+const ttlChecker = async ()=>{
+    setInterval(() => {
+        for( const [key,val] of urlMap){
+            const currTime = new Date;
+            if(currTime.getTime()-val.createdAt.getTime()>=val.ttl_seconds*1000){
+                deleteAliasFromMaps(key);
+            }
+        }
+        
+    }, 200);
 }
 
 
@@ -28,9 +40,9 @@ const shorten = (req,res)=>{
             ++id;
         }
         
-        const details = {long_url,ttl_seconds}
-        urlMap.set(custom_alias,details)
-        console.log(urlMap.get(custom_alias) )
+        const createdAt = new Date();
+        urlMap.set(custom_alias,{long_url,createdAt,ttl_seconds})
+        console.log(urlMap.get(custom_alias))
         
         return res.status(200).json({short_url:`http:localhost:${port}/`+custom_alias})
 
@@ -136,5 +148,6 @@ export {
     getLongURLfromAlias,
     analytics,
     deleteAlias,
-    updateAlias
+    updateAlias,
+    ttlChecker
 } 
