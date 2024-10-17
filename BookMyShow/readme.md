@@ -1,4 +1,7 @@
-## Movie Ticket Booking 
+### Movie Ticket Booking 
+
+## Basic 
+
 
 1. User will be able to buy seats for movies
 2. First, city selection should be done
